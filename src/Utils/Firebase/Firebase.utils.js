@@ -22,8 +22,11 @@ provider.setCustomParameters({
     prompt: "select_account"
 });
 
+//Keeps track of the authentication state of the website
 export const auth = getAuth();
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+export const signInWithGoogleRedirect = () => signInWithRedirect(auth, provider);
+
 export const db = getFirestore();
 
 export const createUserDocumentFromAuth = async (userAuth) => {
