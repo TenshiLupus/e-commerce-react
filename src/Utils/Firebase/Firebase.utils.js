@@ -1,6 +1,6 @@
 import {initializeApp} from 'firebase/app';
-import {getAuth, signInWithRedirect, signInWithPopup, GoogleAuthProvider} from 'firebase/auth';
-import {getFireStore, doc, getDoc, setDoc, Firestore, getFirestore} from 'firebase/firestore'
+import {getAuth, signInWithRedirect, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword} from 'firebase/auth';
+import {getFirestore, doc, getDoc, setDoc} from 'firebase/firestore'
 
 
 //firebase is a NoSql database that stores objects as json and formatted according to firebase´s document model
@@ -29,7 +29,7 @@ export const signInWithGoogleRedirect = () => signInWithRedirect(auth, provider)
 
 export const db = getFirestore();
 
-export const createUserDocumentFromAuth = async (userAuth) => {
+export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {
     
     //yields a docuemnt with the user information
     const userDocRef = doc(db, 'users', userAuth.uid);
@@ -43,11 +43,16 @@ export const createUserDocumentFromAuth = async (userAuth) => {
         const createdAt = new Date();
 
         try{
-            await setDoc(userDocRef, {displayName,email,createdAt});
+            await setDoc(userDocRef, {displayName,email,createdAt, ...additionalInformation});
         }catch(error){
             console.log('error creating the user', error.message);
         }
     }
 
     return userDocRef;
+}
+
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+    if(!email || !password) return;
+    return await createUserWithEmailAndPassword(auth, email, password);
 }
