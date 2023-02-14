@@ -1,6 +1,6 @@
 import {signInWithGooglePopup, createUserDocumentFromAuth} from '../../Utils/Firebase/Firebase.utils'
 
-import SignUpForm from '../../Components/Sign-up-form/sign-up-form.component.jsx'
+import SignUpForm from '../../Components/Sign-up-form/Sign-up-form.component.jsx'
 
 const SignIn = () => {
 
