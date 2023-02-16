@@ -1,8 +1,8 @@
 import {initializeApp} from 'firebase/app';
-import {getAuth, signInWithRedirect, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword} from 'firebase/auth';
+import {getAuth, signInWithRedirect, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged} from 'firebase/auth';
 import {getFirestore, doc, getDoc, setDoc} from 'firebase/firestore'
 
-
+//Observable listener: 
 //firebase is a NoSql database that stores objects as json and formatted according to firebase´s document model
 
 const firebaseConfig = {
@@ -22,8 +22,10 @@ provider.setCustomParameters({
     prompt: "select_account"
 });
 
-//Keeps track of the authentication state of the website
+//Keeps track of the authentication state of the website, Acts as a singleton
+//Authenticaiton is persistent between different sessions, or when refreshed;
 export const auth = getAuth();
+
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 export const signInWithGoogleRedirect = () => signInWithRedirect(auth, provider);
 
@@ -54,5 +56,19 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
     if(!email || !password) return;
+
     return await createUserWithEmailAndPassword(auth, email, password);
 }
+
+export const signInAuthUserWithEmailAndPassword = async (email, password) => {
+    if(!email || !password) return;
+
+    return await signInWithEmailAndPassword(auth, email, password);
+}
+
+//Async signout function that takes in the auth singleton
+//We are returning the promise of whatever signOut returns back to us
+export const signOutUser = async () => await signOut(auth)
+
+//Will call the callback functions whenever the state of the auth singleton changes
+export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth,callback);

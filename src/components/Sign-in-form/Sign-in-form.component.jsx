@@ -1,52 +1,58 @@
 import {useState} from 'react';
-import {createAuthUserWithEmailAndPassword, createUserDocumentFromAuth} from '../../Utils/Firebase/Firebase.utils';
+import {signInWithGooglePopup, createUserDocumentFromAuth, signInAuthUserWithEmailAndPassword} from '../../Utils/Firebase/Firebase.utils';
 
 import FormInput from '../Form-input/Form-input.component';
 import Button from '../Button/Button.component'
 
-import './Sign-up-form.styles.scss'
+import './Sign-in-form.styles.scss'
 
 //Build in the funcitonality first
 
 const defaultFormFields = {
-    displayName: '',
     email: '',
     password: '',
-    confirmPassword: ''
 }
 
-const SignUpForm = () => {
+const SignInForm = () => {
     //Destructuring the values that will be stored in the form fields boject 
 
     const [formFields, setFormFields] = useState(defaultFormFields);
-    const {displayName, email, password, confirmPassword} = formFields;
+    const {email, password} = formFields;
+
+    //Retrieved user object with its setCurrentUser function destructed
 
     const resetFormFields = () => {
         setFormFields(defaultFormFields);
     }
 
+    const signInWIthGoogle = async () => {
+        await signInWithGooglePopup();
+    };
+
+
     //Will stop the form from submitting the form with its current details
     const handleSubmit = async (event) => {
-        event.preventDefault();
+        event.preventDefault()
 
-        if(password !== confirmPassword){
-            alert("Password do not match");
-            return;
-        } 
-
+        //Sends out the given information for verification to the email provider
         try{
-            const {user} = await createAuthUserWithEmailAndPassword(email, password);
-
-            await createUserDocumentFromAuth(user, {displayName});
+            const {user} = await signInAuthUserWithEmailAndPassword(email,password);
             resetFormFields();
         } catch(error){
-            if(error.code === 'auth/email-already-in-use'){
-                alert('Cannot create user, email already in use');
+            switch(error.code){
+                case 'auth/wrong-password':
+                    alert('incorrect password for email');
+                    break;
+                case 'auth/user-not-found':
+                    alert('No user associated with this email');
+                    break;
+                default: 
+                    console.log(error);
             }
-            else{
-                console.error(error)
+            if(error.code === 'auth/wrong-password'){
+                alert('Incorrect password for email');
             }
-        }
+        }   
     }
 
     //Updates the value of the field and stored form data
@@ -63,19 +69,18 @@ const SignUpForm = () => {
             <h2>Don't have an account?</h2>
             <span>Sign up with your email and password</span>
             <form onSubmit={handleSubmit}>
-                
-                <FormInput label="Display Name" type="text" required onChange={handleChange} name="displayName" value={displayName} />
 
                 <FormInput label="Email" type="email" required onChange={handleChange} name="email" value={email} />
 
                 <FormInput label="Password" type="password" required onChange={handleChange} name="password" value={password} />
                 
-                <FormInput label="Confirm Password" type="password" required onChange={handleChange} name="confirmPassword" value={confirmPassword} />
-                
-                <Button type="submit">Sign Up</Button>
+                <div className='buttons-container'>
+                    <Button type="submit">Sign In</Button>
+                    <Button type="button" buttonType='google' onCLick={signInWIthGoogle}>Google sign in</Button>
+                </div>
             </form>
         </div>
     )
 }
 
-export default SignUpForm
+export default SignInForm
