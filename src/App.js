@@ -4,6 +4,7 @@ import Home from './Routes/Home/Home.component';
 import Navigation from './Routes/Navigation/Navigation.component';
 import Authentication from './Routes/Authenticaiton/Authentication.component';
 import Shop from './Routes/Shop/Shop.component'
+import Checkout from './Routes/Checkout/Checkout.component';
 
 //Context is utilized to allow any component to access the information of an object from anywhere in the Dom tree without having to create a data flow traffic
 //Routes need to be children of the routes component to access the subcomponents
@@ -19,6 +20,7 @@ import Shop from './Routes/Shop/Shop.component'
   complete: Do something when finished
   
 */
+//If a react compoennt receives the same object with te value mutated, react does not register that the object is different 
 const App = () => {
   return (
     <Routes>
@@ -26,6 +28,7 @@ const App = () => {
         <Route index element={<Home/>}/>
         <Route path='shop' element={<Shop/>}/>
         <Route path='auth' element={<Authentication/>}/>
+        <Route path='checkout' element={<Checkout/>}/>
       </Route>
     </Routes>
   )
