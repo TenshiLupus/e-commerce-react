@@ -1,6 +1,6 @@
 import {initializeApp} from 'firebase/app';
-import {getAuth, signInWithRedirect, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged} from 'firebase/auth';
-import {getFirestore, doc, getDoc, setDoc} from 'firebase/firestore'
+import {getAuth, signInWithRedirect, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, } from 'firebase/auth';
+import {getFirestore, doc, getDoc, setDoc, collection, writeBatch, query, getDocs} from 'firebase/firestore'
 
 //Observable listener: 
 //firebase is a NoSql database that stores objects as json and formatted according to firebase´s document model
@@ -30,6 +30,46 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 export const signInWithGoogleRedirect = () => signInWithRedirect(auth, provider);
 
 export const db = getFirestore();
+
+export const addCollectionAndDocuments =  async (collectionKey, objectsToAdd) => {
+    const collectionRef = collection(db, collectionKey);
+    //performs multiple read and writes as a single atomic unit ie, a single transaction.
+    const batch = writeBatch(db)
+
+    objectsToAdd.forEach((object) => {
+        //using the collectionref fore each item, we assign them a title.
+        const docRef = doc(collectionRef, object.title.toLowerCase());
+        //assign the location of the collectionred with the object value on set
+        batch.set(docRef, object);
+    });
+
+    //start the trasnsaction process and wait till the transaction is over
+    await batch.commit();
+    console.log('done');
+};
+
+//Create a reference of the docuemnt in the given path
+export const getCategoriesAndDocuments = async () => {
+    const collectionRef = collection(db,'categories');
+    
+    //Creates an instance of a query with the given reference
+    const cq = query(collectionRef);
+
+    //obtain a view of the documents retrieved from the query
+    const querySnapshot = await getDocs(cq);
+
+    const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+        //Destructure the previously assigned title and the data of the snapshot
+        const {title, items} = docSnapshot.data();
+
+        //for each category title assign the corresponding items as children
+        acc[title.toLowerCase()] = items
+        return acc;
+    }, {})
+
+    //The promise of the function is not resolved until the await on getDocs is complete
+    return categoryMap;
+}
 
 export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {
     
