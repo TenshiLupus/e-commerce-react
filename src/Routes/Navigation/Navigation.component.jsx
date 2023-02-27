@@ -11,7 +11,7 @@ import { CartContext } from '../../Contexts/Cart.context';
 
 import {signOutUser} from '../../Utils/Firebase/Firebase.utils';
 
-import './Navigation.styles.scss'
+import {NavigationContainer} from './Navigation.styles';
 
 const Navigation = () => {
     //We are passing in functions to all the components wrapped by the context
@@ -21,7 +21,7 @@ const Navigation = () => {
     return (
       <Fragment>
         <div className='navigation'>
-            <Link className='logo-container' to='/'>
+            {/* <Link className='logo-container' to='/'>
                 <CrownLogo className='logo'/>
             </Link>
 
@@ -37,7 +37,7 @@ const Navigation = () => {
 
                 <CartIcon/>
             </div>
-            {isCartOpen && <CartDropdown />}
+            {isCartOpen && <CartDropdown />} */}
         </div>
         <Outlet/>
       </Fragment>

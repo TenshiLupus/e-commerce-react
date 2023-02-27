@@ -21,6 +21,7 @@ import Checkout from './Routes/Checkout/Checkout.component';
   
 */
 //If a react compoennt receives the same object with te value mutated, react does not register that the object is different 
+//Styling issues may arise when styling with SASS, like certain classes overriding others unintentionally
 const App = () => {
   return (
     <Routes>

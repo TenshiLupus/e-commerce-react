@@ -1,8 +1,7 @@
+import {Link} from 'react-router-dom';
 import { useContext, Fragment} from "react";
 import { CategoriesContext } from "../../Contexts/Products.context";
 import CategoryPreview from "../../Components/category-preview/category-preview.component";
-
-import ProductCard from "../../Components/Product-card/Product-card.component";
 
 
 const CategoriesPreview = () => {
