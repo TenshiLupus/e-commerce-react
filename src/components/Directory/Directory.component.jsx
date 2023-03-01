@@ -1,6 +1,6 @@
 import DirectoryItem from '../Directory-item/Directory-item.component';
 
-import {DirectoryContainer} from './Directory.styles';
+import {DirectoryContainer} from './directory.styles';
 
 const Directory = () => {
   const categories = [
