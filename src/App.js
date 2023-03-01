@@ -2,7 +2,7 @@ import {Routes, Route} from 'react-router-dom';
 
 import Home from './Routes/Home/Home.component';
 import Navigation from './Routes/Navigation/Navigation.component';
-import Authentication from './Routes/Authenticaiton/Authentication.component';
+import Authentication from './Routes/Authentication/Authentication.component';
 import Shop from './Routes/Shop/Shop.component'
 import Checkout from './Routes/Checkout/Checkout.component';
 
