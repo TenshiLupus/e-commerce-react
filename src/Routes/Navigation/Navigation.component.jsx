@@ -10,8 +10,8 @@ import {signOutUser} from '../../Utils/Firebase/Firebase.utils';
 
 import {NavigationContainer, NavLink, NavLinks, LogoContainer} from './Navigation.styles';
 
-import CartIcon from '../../Components/cart-icon/Cart-icon.component';
-import CartDropdown from '../../Components/cart-dropdown/Cart-dropdown.component'
+import CartIcon from '../../components/cart-icon/Cart-icon.component';
+import CartDropdown from '../../components/cart-dropdown/Cart-dropdown.component'
 
 //base component functionality is being inherited from the styled-components inported in the styles file. Hence the ability to treat the styled components as normal components
 const Navigation = () => {
