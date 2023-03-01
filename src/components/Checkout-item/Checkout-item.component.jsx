@@ -10,7 +10,7 @@ import {
   Arrow,
   Value,
   RemoveButton,
-} from './Checkout-item.styles';
+} from './checkout-item.styles';
 
 const CheckoutItem = ({ cartItem }) => {
   const { name, imageUrl, price, quantity } = cartItem;

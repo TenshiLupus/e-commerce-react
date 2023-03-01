@@ -4,10 +4,10 @@ import {useNavigate} from 'react-router-dom';
 
 import {CartContext} from '../../Contexts/Cart.context';
 
-import Button from '../Button/Button.component';
-import CartItem from '../Cart-item/Cart-item.component';
+import Button from '../button/button.component';
+import CartItem from '../cart-item/cart-item.component';
 
-import {CartDropDownContainer, EmptyMessage, CartItems} from './Cart-dropdown.styles';
+import {CartDropDownContainer, EmptyMessage, CartItems} from './cart-dropdown.styles';
 
 const CartDropdown = () => {
     //Whenever we use context, We are dragging out the values passed in to the provider 

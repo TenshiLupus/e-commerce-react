@@ -1,4 +1,4 @@
-import ProductCard from '../Product-card/Product-card.component';
+import ProductCard from '../product-card/product-card.component';
 
 import {
   CategoryPreviewContainer,
