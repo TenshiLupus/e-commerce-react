@@ -1,16 +1,15 @@
-import SignUpForm from '../../Components/Sign-up-form/Sign-up-form.component.jsx'
-import SignInForm from '../../Components/Sign-in-form/Sign-in-form.component.jsx'
+import SignUpForm from '../../Components/Sign-up-form/Sign-up-form.component';
+import SignInForm from '../../Components/Sign-in-form/Sign-in-form.component';
 
-import './Authentication.styles.scss'
+import { AuthenticationContainer } from './Authentication.styles';
 
 const Authentication = () => {
+  return (
+    <AuthenticationContainer>
+      <SignInForm />
+      <SignUpForm />
+    </AuthenticationContainer>
+  );
+};
 
-    return (
-        <div className="authentication-container">
-            <SignInForm />
-            <SignUpForm />
-        </div>
-    );
-}
-
-export default Authentication
+export default Authentication;

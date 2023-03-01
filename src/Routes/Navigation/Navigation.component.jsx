@@ -11,8 +11,9 @@ import { CartContext } from '../../Contexts/Cart.context';
 
 import {signOutUser} from '../../Utils/Firebase/Firebase.utils';
 
-import {NavigationContainer} from './Navigation.styles';
+import {NavigationContainer, NavLink, NavLinks, LogoContainer} from './Navigation.styles';
 
+//base component functionality is being inherited from the styled-components inported in the styles file. Hence the ability to treat the styled components as normal components
 const Navigation = () => {
     //We are passing in functions to all the components wrapped by the context
     const {currentUser} = useContext(UserContext);
@@ -20,25 +21,25 @@ const Navigation = () => {
 
     return (
       <Fragment>
-        <div className='navigation'>
-            {/* <Link className='logo-container' to='/'>
+        <NavigationContainer>
+            <LogoContainer to='/'>
                 <CrownLogo className='logo'/>
-            </Link>
+            </LogoContainer>
 
-            <div className='nav-links-container'>
-                <Link className='nav-link' to='/shop'>
+            <NavLinks>
+                <NavLink to='/shop'>
                     SHOP
-                </Link>
+                </NavLink>
                 {
                     currentUser ? 
-                    (<span className='nav-link' onClick={signOutUser}>Sign Out</span>) : 
-                    (<Link className='nav-link' to='/auth'>Sign in</Link>)
+                    (<NavLink as='span' onClick={signOutUser}>Sign Out</NavLink>) : 
+                    (<NavLink to='/auth'>Sign in</NavLink>)
                 }
 
                 <CartIcon/>
-            </div>
-            {isCartOpen && <CartDropdown />} */}
-        </div>
+            </NavLinks>
+            {isCartOpen && <CartDropdown />}
+        </NavigationContainer>
         <Outlet/>
       </Fragment>
     )
