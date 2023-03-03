@@ -22,6 +22,17 @@ import Checkout from './Routes/Checkout/Checkout.component';
 */
 //If a react compoennt receives the same object with te value mutated, react does not register that the object is different 
 //Styling issues may arise when styling with SASS, like certain classes overriding others unintentionally
+
+//Reducers: They only store read-only values
+//UseEffect: side effect that happens when a value in the dependencies changes, else globally.
+//A Good time to use reducers is when one update needs to modify multiple values
+
+//Contexts will initialize with an initial value, however. We will not be able to access its updated values if it is not withing the reachability of the host component
+//For scaling of the application, perhaps it is preferable to wrap a parent component with a wider reachabaility.
+
+//Redux: single source of truth, the place where all state is expected to reside, ie redux store
+//Redux has its own provider that we can use and wrapa around the application to reach data that we stored.
+
 const App = () => {
   return (
     <Routes>

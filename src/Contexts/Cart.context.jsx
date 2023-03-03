@@ -1,15 +1,14 @@
-import {createContext, useState, useEffect} from 'react';
+import {createContext, useReducer} from 'react';
+import {createAction} from '/utils/reducer/reducer.utils'
 
 //In react, components receive individual props items
 const addCartItem = (cartItems, productToAdd) => {
-    console.log("Is this working?")
     const existingCartItem = cartItems.find((cartItem) => cartItem.id === productToAdd.id)
 
     if(existingCartItem){
         return cartItems.map((cartItem) => cartItem.id === productToAdd.id ? 
         {...cartItem, quantity: cartItem.quantity + 1} : cartItem);
     }
-    alert("Working?");
 
     //cart items with all their corresponding attributes represented as objects. Initiate quantity at 1 if no items with same id found
     return [...cartItems, {...productToAdd, quantity: 1}]
@@ -42,38 +41,77 @@ export const CartContext = createContext({
     cartTotal: 0,
 })
 
+const CART_ACTION_TYPES = {
+    SET_CART_ITEMS: 'SET_CART_ITEMS',
+    SET_IS_CART_OPEN: 'SET_IS_CART_OPEN'
+}
+
+const INITIAL_STATE = {
+    isCartOpen: false,
+    cartItems: [],
+    cartCount: 0,
+    cartTotal: 0,
+}
+
+// state gets implicitly passed in into the reducer
+const cartReducer = (state, action) => {
+    const {type, payload} = action;
+
+    switch(type){
+        case CART_ACTION_TYPES.SET_CART_ITEMS: 
+
+            return {
+                ...state,
+                // The new values that we want to store
+                ...payload,
+            }
+        case CART_ACTION_TYPES.SET_IS_CART_OPEN: 
+
+            return {
+                ...state,
+                // The new values that we want to store
+                isCartOpen: payload
+            }
+        default: 
+            throw new Error(`Unhandled type of ${type} in cartReducer`)
+    }
+}
+
 export const CartProvider = ({children}) => {
 
-    const [isCartOpen, setIsCartOpen] = useState(false);
-    const [cartItems, setCartItems] = useState([]);
-    const [cartCount, setCartCount] = useState(0);
-    const [cartTotal, setCartTotal] = useState(0);
+    const [{cartItems, isCartOpen, cartCount, cartTotal}, dispatch] = useReducer(cartReducer, INITIAL_STATE);
     
-    //good practice is that use effects only governs on one single responsibility
-    useEffect(() => {
-        const newCartCount = cartItems.reduce((total, cartItem) => total + cartItem.quantity, 0);
-        setCartCount(newCartCount);
+    
+    const updateCartItemsReducer = (newCartItems) => {
 
-    }, [cartItems]);
-
-    useEffect(() => {
+        const newCartCount = cartItems.reduce((total, cartItem) => total + cartItem.quantity, 0); 
         const newCartTotal = cartItems.reduce((total, cartItem) => total + cartItem.quantity * cartItem.price, 0);
-        setCartTotal(newCartTotal);
-
-    }, [cartItems]);
+        
+        dispatch(
+            createAction(CART_ACTION_TYPES.SET_CART_ITEMS, {cartItems: newCartItems, cartTotal: newCartTotal, cartCount: newCartCount})
+        );
+    }
 
     const addItemToCart = (productToAdd) => {
-        setCartItems(addCartItem(cartItems, productToAdd));
+        const newCartItems = addCartItem(cartItems, productToAdd);
+        updateCartItemsReducer(newCartItems);
     };
     
     const removeItemFromCart = (cartItemToRemove) => {
-        setCartItems(removeCartItem(cartItems, cartItemToRemove));
+        const newCartItems = removeCartItem(cartItems, cartItemToRemove);
+        updateCartItemsReducer(newCartItems);
     };
     
     const clearItemFromCart = (cartItemToRemove) => {
-        setCartItems(clearCartItem(cartItems, cartItemToRemove));
+        const newCartItems = clearCartItem(cartItems, cartItemToRemove);
+        updateCartItemsReducer(newCartItems);
     };
-    
+
+    const setIsCartOpen = (bool) => {
+        dispatch(createAction(CART_ACTION_TYPES.SET_IS_CART_OPEN, bool)
+    )};
+
+
     //These properties are beig exposed by the value field
     const value = {isCartOpen, setIsCartOpen, addItemToCart, cartItems, cartCount, removeItemFromCart, clearItemFromCart, cartTotal};
     
