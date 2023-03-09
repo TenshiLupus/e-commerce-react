@@ -57,19 +57,9 @@ export const getCategoriesAndDocuments = async () => {
 
     //obtain a view of the documents retrieved from the query
     const querySnapshot = await getDocs(cq);
-
-    const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
-        //Destructure the previously assigned title and the data of the snapshot
-        const {title, items} = docSnapshot.data();
-
-        //for each category title assign the corresponding items as children
-        acc[title.toLowerCase()] = items
-        return acc;
-    }, {})
-
-    //The promise of the function is not resolved until the await on getDocs is complete
-    return categoryMap;
+    return querySnapshot.docs.map(docSnapshot => docSnapshot.data());
 }
+
 
 export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {
     

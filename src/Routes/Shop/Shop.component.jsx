@@ -1,10 +1,21 @@
+import {useEffect} from 'react';
 import {Routes, Route} from 'react-router-dom';
-import CategoriesPreview from '../Categories-preview/Categories-preview.component';
-import Category from '../Category/Category.component';
+import {useDispatch} from 'react-redux';
 
+import CategoriesPreview from '../categories-preview/Categories-preview.component';
+import Category from '../category/Category.component';
+import {fetchCategoriesAsync} from '../../store/categories/category.action'
 
 
 const Shop = () => {
+    const dispatch = useDispatch()
+
+    //Fires only when the provider gets mounted
+    //this is now just a regular component that triggers whenever the componenent mounts
+    useEffect(() => {
+        dispatch(fetchCategoriesAsync())
+    }, []);
+
 
     return (
        <Routes>

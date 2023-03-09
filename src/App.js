@@ -1,10 +1,15 @@
 import {Routes, Route} from 'react-router-dom';
+import {useEffect} from 'react';
 
-import Home from './Routes/Home/Home.component';
-import Navigation from './Routes/Navigation/Navigation.component';
-import Authentication from './Routes/Authentication/Authentication.component';
-import Shop from './Routes/Shop/Shop.component'
-import Checkout from './Routes/Checkout/Checkout.component';
+import Home from './routes/home/Home.component';
+import Navigation from './routes/navigation/Navigation.component';
+import Authentication from './routes/authentication/Authentication.component';
+import Shop from './routes/shop/Shop.component'
+import Checkout from './routes/checkout/Checkout.component';
+
+import { onAuthStateChangedListener, createUserDocumentFromAuth} from './utils/Firebase/Firebase.utils'
+import { setCurrentUser } from './store/user/user.action';
+import { useDispatch } from 'react-redux';
 
 //Context is utilized to allow any component to access the information of an object from anywhere in the Dom tree without having to create a data flow traffic
 //Routes need to be children of the routes component to access the subcomponents
@@ -32,8 +37,32 @@ import Checkout from './Routes/Checkout/Checkout.component';
 
 //Redux: single source of truth, the place where all state is expected to reside, ie redux store
 //Redux has its own provider that we can use and wrapa around the application to reach data that we stored.
+//useDispatch: is what we get back from react redux  
+//whenever we update one of our reducer values we always retrieve a new state object.
+//A reducer will always sotre the most basic format of a reducer
+//A selector will the ncovert that data into the format that we want
+
+//Create an action => dispatch 
+//thunks allow actions to be passed as functions
 
 const App = () => {
+  //Dispatch the function to the root reducers which in turn dispatchers it to all reducers whithin it
+  //hooks are expected to change, but useDispatch does not change
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    //the authentication listenever will return us a function that will be utilized to stop listening
+    //The listener makes it so all the authentication logic will now reside within the UserContext, aside from the signup
+    const unsubscribe = onAuthStateChangedListener((user) => {
+        if(user){
+            createUserDocumentFromAuth(user);
+        }
+        dispatch(setCurrentUser(user));
+    });
+    return unsubscribe;
+}, [dispatch]);
+
+
   return (
     <Routes>
       <Route path='/' element={<Navigation/>}>
