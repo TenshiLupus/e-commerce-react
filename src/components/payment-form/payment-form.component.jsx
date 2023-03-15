@@ -5,10 +5,12 @@ import { useSelector } from "react-redux";
 import { selectCartTotal } from "../../store/cart/cart.selector";
 import { selectCurrentUser } from "../../store/user/user.selector";
 
-import { FormContainer } from "./payment-form.styles";
+import {
+  FormContainer,
+  PaymentButton,
+  PaymentFormContainer,
+} from "./payment-form.styles";
 import { BUTTON_TYPE_CLASSES } from "../button/button.component";
-
-import { PaymentButton} from "./payment-form.styles";
 
 const PaymentForm = () => {
   const stripe = useStripe();
@@ -28,10 +30,12 @@ const PaymentForm = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ amount: amount * 100 }),
+      body: JSON.stringify({ amount: amount}),
     }).then((res) => {
       return res.json();
     });
+
+    console.log(response);
 
     const clientSecret = response.paymentIntent.client_secret;
 
@@ -56,7 +60,7 @@ const PaymentForm = () => {
   };
 
   return (
- 
+    <PaymentFormContainer>
       <FormContainer onSubmit={paymentHandler}>
         <h2>Credit Card Payment:</h2>
         <CardElement />
@@ -67,7 +71,7 @@ const PaymentForm = () => {
           Pay Now
         </PaymentButton>
       </FormContainer>
-    
+    </PaymentFormContainer>
   );
 };
 export default PaymentForm;

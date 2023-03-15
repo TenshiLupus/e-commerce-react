@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 
 import CategoriesPreview from '../categories-preview/Categories-preview.component';
 import Category from '../category/Category.component';
-import {fetchCategoriesAsync} from '../../store/categories/category.action'
+import { fetchCategoriesStart } from '../../store/categories/category.action';
 
 
 const Shop = () => {
@@ -13,7 +13,7 @@ const Shop = () => {
     //Fires only when the provider gets mounted
     //this is now just a regular component that triggers whenever the componenent mounts
     useEffect(() => {
-        dispatch(fetchCategoriesAsync())
+        dispatch(fetchCategoriesStart())
     }, []);
 
 
